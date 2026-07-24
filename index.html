@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polymarket Arbitrage Bot – Argo.cashflow</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Courier New', monospace; background: #050505; color: #f0f0f0; }
+        .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 90vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            border-bottom: 1px solid #00f5ff33;
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 6vw, 4rem);
+            background: linear-gradient(135deg, #00f5ff, #39ff14);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        .hero .subtitle {
+            font-size: 1.2rem; color: #888; max-width: 600px; margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        .hero .price-tag {
+            font-size: 3rem; color: #39ff14; font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .hero .price-note { color: #555; font-size: 0.9rem; margin-bottom: 30px; }
+        .cta-btn {
+            display: inline-block; padding: 18px 48px;
+            background: linear-gradient(135deg, #00f5ff, #39ff14);
+            color: #050505; font-weight: bold; font-size: 1.1rem;
+            text-decoration: none; border-radius: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px #39ff1466; }
+
+        /* ===== VALUE PROPS ===== */
+        .section { padding: 80px 0; border-bottom: 1px solid #1a1a2e; }
+        .section h2 {
+            font-size: 1.8rem; color: #00f5ff; margin-bottom: 40px;
+            text-align: center;
+        }
+        .grid-3 {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .card {
+            background: #0a0a0f; border: 1px solid #1a1a2e; border-radius: 12px;
+            padding: 28px; transition: border-color 0.3s;
+        }
+        .card:hover { border-color: #00f5ff66; }
+        .card .icon { font-size: 2rem; margin-bottom: 12px; }
+        .card h3 { color: #39ff14; font-size: 1.1rem; margin-bottom: 8px; }
+        .card p { color: #888; font-size: 0.9rem; line-height: 1.5; }
+
+        /* ===== PRICING ===== */
+        .pricing-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px; margin-top: 40px;
+        }
+        .pricing-card {
+            background: #0a0a0f; border: 1px solid #1a1a2e; border-radius: 12px;
+            padding: 32px; text-align: center; position: relative;
+        }
+        .pricing-card.featured {
+            border-color: #00f5ff;
+            box-shadow: 0 0 30px #00f5ff22;
+        }
+        .pricing-card .badge {
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            background: #ff00ff; color: #fff; padding: 4px 16px;
+            border-radius: 20px; font-size: 0.8rem; font-weight: bold;
+        }
+        .pricing-card .price { font-size: 2.5rem; color: #39ff14; font-weight: bold; margin: 20px 0; }
+        .pricing-card ul { list-style: none; text-align: left; margin: 20px 0; }
+        .pricing-card li { padding: 8px 0; color: #aaa; font-size: 0.9rem; }
+        .pricing-card li::before { content: "✓ "; color: #39ff14; }
+        .pricing-card .cta-small {
+            display: inline-block; padding: 14px 36px; margin-top: 16px;
+            background: #00f5ff; color: #050505; font-weight: bold;
+            text-decoration: none; border-radius: 8px; font-size: 1rem;
+        }
+        .pricing-card .cta-small:hover { background: #39ff14; }
+
+        /* ===== FAQ ===== */
+        .faq-item { margin-bottom: 16px; }
+        .faq-q {
+            font-size: 1rem; color: #00f5ff; font-weight: bold;
+            padding: 12px 0; cursor: pointer;
+        }
+        .faq-a {
+            color: #888; font-size: 0.9rem; line-height: 1.5;
+            padding: 0 0 12px 0;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center; padding: 40px 0;
+            color: #555; font-size: 0.85rem;
+        }
+        .footer a { color: #ff00ff; text-decoration: none; }
+
+        /* ===== SOCIAL PROOF ===== */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px; margin-bottom: 40px;
+        }
+        .stat {
+            background: #0a0a0f; border: 1px solid #1a1a2e; border-radius: 8px;
+            padding: 20px; text-align: center;
+        }
+        .stat .num { font-size: 1.8rem; color: #39ff14; font-weight: bold; }
+        .stat .label { font-size: 0.8rem; color: #666; margin-top: 4px; }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.8rem; }
+            .hero .price-tag { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="container">
+        <h1>🤖 Polymarket<br>Arbitrage Bot</h1>
+        <p class="subtitle">
+            Automatisiertes Trading-Bot-System für Polymarket Prediction Markets.<br>
+            Findet mathematisch garantierte Arbitrage – rund um die Uhr.
+        </p>
+        <div class="price-tag">29 €</div>
+        <p class="price-note">Einmalzahlung · Kompletter Quellcode · Keine Abo-Falle</p>
+        <a href="#pricing" class="cta-btn">JETZT SICHERN 🚀</a>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat"><div class="num">100%</div><div class="label">Mathematisch risikofrei</div></div>
+            <div class="stat"><div class="num">3.2M+</div><div class="label">Marktdaten pro Scan</div></div>
+            <div class="stat"><div class="num">24/7</div><div class="label">Automatischer Betrieb</div></div>
+            <div class="stat"><div class="num">Python</div><div class="label">Vollständiger Quellcode</div></div>
+        </div>
+
+        <h2>⚡ Was der Bot kann</h2>
+        <div class="grid-3">
+            <div class="card">
+                <div class="icon">🔍</div>
+                <h3>Multi-Level Orderbuch</h3>
+                <p>Scannt nicht nur den besten Preis, sondern die top 10 Ask-Levels. Matcht anteilig zum gewichteten Durchschnittspreis.</p>
+            </div>
+            <div class="card">
+                <div class="icon">🛡️</div>
+                <h3>Slippage-Schutz</h3>
+                <p>Konfigurierbares Slippage-Limit. Automatischer Abbruch bei Überschreitung + Retry mit angepasstem Preis.</p>
+            </div>
+            <div class="card">
+                <div class="icon">📊</div>
+                <h3>Live-Dashboard</h3>
+                <p>Flask + Chart.js Dashboard mit P&L-Chart, Win-Rate, Trade-History und 24h-Statistik. Auto-Refresh alle 15s.</p>
+            </div>
+            <div class="card">
+                <div class="icon">🧪</div>
+                <h3>Simulations-Modus</h3>
+                <p>Teste alle Strategien ohne Risiko. DRY_RUN=True → keine echten Trades, aber volles Logging.</p>
+            </div>
+            <div class="card">
+                <div class="icon">📝</div>
+                <h3>CSV-Trade-Log</h3>
+                <p>Jeder Trade wird mit Event, Preis, Slippage, Profit und ROI geloggt. Ideal für eigene Analysen und Steuer.</p>
+            </div>
+            <div class="card">
+                <div class="icon">📈</div>
+                <h3>Wochenbericht</h3>
+                <p>Automatischer Wochenbericht mit Chart. Zeigt: beste Events, tägliche Performance, Top-Trades.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section" id="pricing">
+    <div class="container">
+        <h2>💎 Pakete</h2>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Basic</h3>
+                <p style="color:#888;font-size:0.9rem;">Bot-Code von GitHub</p>
+                <div class="price">0 €</div>
+                <ul>
+                    <li>Bot-Quellcode (GitHub)</li>
+                    <li>Simulations-Modus</li>
+                    <li>CSV-Trade-Log</li>
+                    <li>YouTube-Tutorials</li>
+                </ul>
+                <a href="https://github.com/argo-cashflow/polymarket-arb-bot" class="cta-small" style="background:#333;color:#888;">ZUM CODE</a>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="badge">🔥 EMPFOHLEN</div>
+                <h3>Complete Package</h3>
+                <p style="color:#888;font-size:0.9rem;">Bot + Dashboard + Guide</p>
+                <div class="price">29 €</div>
+                <ul>
+                    <li>Bot mit Multi-Level Orderbuch</li>
+                    <li>Slippage-Schutz + Retry-Logik</li>
+                    <li>Live-Dashboard (Flask + Chart.js)</li>
+                    <li>Performance-Tracking + Wochenbericht</li>
+                    <li>Setup-Guide (PDF)</li>
+                    <li>.env-Konfiguration inkl. Erklärung</li>
+                    <li>YouTube-Tutorial Playlist</li>
+                    <li>1 Monat Updates</li>
+                </ul>
+                <a href="#" class="cta-small">KAUFEN →</a>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Premium</h3>
+                <p style="color:#888;font-size:0.9rem;">Bot + 1:1 Setup</p>
+                <div class="price">69 €</div>
+                <ul>
+                    <li>Alles aus Complete Package</li>
+                    <li>1:1 Setup-Call (30 min)</li>
+                    <li>Individuelle Konfiguration</li>
+                    <li>Server-Setup-Hilfe (VPS)</li>
+                    <li>3 Monate Updates</li>
+                    <li>Prioritäts-Support</li>
+                </ul>
+                <a href="#" class="cta-small">KAUFEN →</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <h2>📖 Inklusive Video-Tutorials</h2>
+        <p style="text-align:center;color:#888;margin-bottom:30px;">
+            Jedes Paket enthält Zugriff auf die komplette Tutorial-Reihe:<br>
+            Von der Theorie bis zum Live-Bot – Schritt für Schritt erklärt.
+        </p>
+        <div class="grid-3">
+            <div class="card" style="text-align:center">
+                <div class="icon">1️⃣</div>
+                <h3>Theorie</h3>
+                <p>Wie Arbitrage funktioniert und warum es mathematisch risikofrei ist</p>
+            </div>
+            <div class="card" style="text-align:center">
+                <div class="icon">2️⃣</div>
+                <h3>Aufbau</h3>
+                <p>Bot programmieren, API-Anbindung, Orderbuch-Scanning</p>
+            </div>
+            <div class="card" style="text-align:center">
+                <div class="icon">3️⃣</div>
+                <h3>Live-Betrieb</h3>
+                <p>Simulation → Live-Trading → Performance optimieren</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <h2>❓ FAQ</h2>
+
+        <div class="faq-item">
+            <div class="faq-q">Brauche ich Programmierkenntnisse?</div>
+            <div class="faq-a">Grundlegende Python-Kenntnisse helfen, aber der Bot kommt fertig konfiguriert. Die Tutorials erklären alles Schritt für Schritt.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Wie viel Geld kann ich verdienen?</div>
+            <div class="faq-a">Das hängt von deinem Kapital und der Marktlage ab. Die Mathematik ist risikofrei, aber die Margen sind klein (0.1-1%). Mit 1000€ Kapital sind 50-150€/Monat realistisch. Der Bot ist kein "get rich quick", sondern ein solides Werkzeug.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Ist das in Deutschland legal?</div>
+            <div class="faq-a">Polymarket ist eine US-Plattform. Die rechtliche Lage in DE ist komplex – informiere dich vorher. Der Bot wird als Bildungs- und Forschungsprojekt bereitgestellt.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Brauche ich einen Server?</div>
+            <div class="faq-a">Für Tests reicht dein Laptop. Für 24/7-Betrieb empfehle ich einen VPS ab 5€/Monat (Hetzner, DigitalOcean).</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Gibt es Geld-zurück-Garantie?</div>
+            <div class="faq-a">Ja, 14 Tage. Wenn der Bot nicht das liefert was versprochen wurde, bekommst du dein Geld zurück.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Kann ich den Bot anpassen?</div>
+            <div class="faq-a">Ja, der komplette Quellcode liegt dir vor. Du kannst ihn erweitern, anpassen oder eigene Strategien einbauen.</div>
+        </div>
+    </div>
+</div>
+
+<div class="section" style="text-align:center;border:none;">
+    <div class="container">
+        <h2 style="color:#39ff14">Bereit zu starten? 🚀</h2>
+        <p style="color:#888;margin:20px 0;font-size:1.1rem;">
+            Hol dir den Bot + Dashboard + Tutorials – einmalig, keine Abos.
+        </p>
+        <a href="#pricing" class="cta-btn">ZUM PAKET 🎯</a>
+    </div>
+</div>
+
+<div class="footer">
+    <p>© 2026 <a href="https://youtube.com/@argo.cashflow">Argo.cashflow</a></p>
+    <p style="margin-top:8px;">
+        <a href="https://youtube.com/@argo.cashflow">YouTube</a> ·
+        <a href="https://github.com/argo-cashflow">GitHub</a>
+    </p>
+</div>
+
+</body>
+</html>
