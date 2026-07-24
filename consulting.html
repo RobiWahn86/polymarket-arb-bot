@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beratung buchen – RobiWahn86</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Courier New', monospace; background: #050505; color: #f0f0f0; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 2rem; background: linear-gradient(135deg,#00f5ff,#39ff14); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+        .subtitle { color: #888; margin-bottom: 40px; }
+
+        .packages { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 20px; margin-bottom: 40px; }
+        .package { background: #0a0a0f; border: 1px solid #1a1a2e; border-radius: 10px; padding: 24px; text-align: center; }
+        .package.featured { border-color: #00f5ff; box-shadow: 0 0 20px #00f5ff22; }
+        .package h3 { color: #00f5ff; font-size: 1.1rem; }
+        .package .price { font-size: 2rem; color: #39ff14; font-weight: bold; margin: 12px 0; }
+        .package .desc { color: #888; font-size: 0.85rem; margin-bottom: 16px; }
+        .package ul { list-style: none; text-align: left; margin: 16px 0; }
+        .package li { padding: 6px 0; color: #aaa; font-size: 0.85rem; }
+        .package li::before { content: "✓ "; color: #39ff14; }
+
+        .btn { display: inline-block; padding: 12px 32px; background: linear-gradient(135deg,#00f5ff,#39ff14); color: #050505; font-weight: bold; text-decoration: none; border-radius: 8px; font-size: 0.95rem; margin-top: 8px; }
+        .btn-outline { background: transparent; border: 2px solid #ff00ff; color: #ff00ff; }
+
+        .form-section { background: #0a0a0f; border: 1px solid #1a1a2e; border-radius: 10px; padding: 32px; margin-top: 40px; }
+        .form-section h2 { color: #ff00ff; margin-bottom: 20px; font-size: 1.2rem; }
+        label { display: block; color: #888; margin: 16px 0 4px; font-size: 0.85rem; }
+        input, select, textarea { width: 100%; padding: 10px; background: #1a1a2e; border: 1px solid #2a2a3e; border-radius: 6px; color: #f0f0f0; font-family: inherit; font-size: 0.9rem; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #00f5ff; }
+        textarea { min-height: 80px; resize: vertical; }
+        .btn-submit { width: 100%; padding: 14px; margin-top: 20px; background: #ff00ff; color: #fff; font-weight: bold; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+        .btn-submit:hover { background: #39ff14; color: #050505; }
+
+        .faq { margin-top: 40px; }
+        .faq h2 { color: #00f5ff; margin-bottom: 16px; font-size: 1.2rem; }
+        .faq-q { color: #f0f0f0; font-weight: bold; margin-top: 16px; }
+        .faq-a { color: #888; font-size: 0.9rem; margin-top: 4px; }
+        .footer { text-align: center; padding: 30px; color: #555; font-size: 0.85rem; }
+        .footer a { color: #ff00ff; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📅 Beratung buchen</h1>
+    <p class="subtitle">1:1 Python-Coaching – Trading Bots, Automation, Web-Dashboards</p>
+
+    <div class="packages">
+        <div class="package">
+            <h3>Quick Call</h3>
+            <div class="price">50 €</div>
+            <div class="desc">30 Minuten – ideal für eine erste Frage</div>
+            <ul>
+                <li>Deine konkrete Frage</li>
+                <li>Code-Review oder Debugging</li>
+                <li>Architektur-Beratung</li>
+                <li>Antwort innerhalb 24h inklusive</li>
+            </ul>
+            <a href="#" class="btn">BUCHEN</a>
+        </div>
+        <div class="package featured">
+            <h3>🔥 Workshop</h3>
+            <div class="price">120 €</div>
+            <div class="desc">90 Minuten – gemeinsames Projekt</div>
+            <ul>
+                <li>Bot-Architektur planen</li>
+                <li>API-Integration live coden</li>
+                <li>Dashboard bauen</li>
+                <li>Code-Vorlagen + Cheat-Sheet</li>
+            </ul>
+            <a href="#" class="btn">BUCHEN</a>
+        </div>
+        <div class="package">
+            <h3>Intensiv-Coaching</h3>
+            <div class="price">250 €</div>
+            <div class="desc">3h – Komplettes Setup inklusive</div>
+            <ul>
+                <li>Bot-Entwicklung von Null</li>
+                <li>Server-Setup (VPS)</li>
+                <li>Live-Dashboard</li>
+                <li>1 Woche Follow-Up per Mail</li>
+            </ul>
+            <a href="#" class="btn">BUCHEN</a>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h2>📝 Anfrage stellen</h2>
+        <p style="color:#888;font-size:0.85rem;margin-bottom:16px;">
+            Kein passendes Paket? Beschreib dein Anliegen – ich melde mich innerhalb von 24h.
+        </p>
+        <label>Name</label>
+        <input type="text" placeholder="Dein Name">
+        <label>E-Mail</label>
+        <input type="email" placeholder="deine@email.de">
+        <label>Was brauchst du?</label>
+        <textarea placeholder="Erzähl mir von deinem Projekt..."></textarea>
+        <button class="btn-submit">ANFRAGE SENDEN →</button>
+    </div>
+
+    <div class="faq">
+        <h2>❓ FAQ</h2>
+        <div class="faq-q">Brauche ich Vorkenntnisse?</div>
+        <div class="faq-a">Grundlegendes Python-Verständnis hilft, aber ich passe mich deinem Level an.</div>
+        <div class="faq-q">Wie läuft eine Session ab?</div>
+        <div class="faq-a">Per Discord oder Zoom. Ich teile meinen Bildschirm und wir coden gemeinsam.</div>
+        <div class="faq-q">Kann ich Geld zurück verlangen?</div>
+        <div class="faq-a">Ja, wenn du nach der Session sagst "das hat nichts gebracht" – kein Risiko.</div>
+        <div class="faq-q">In welcher Sprache?</div>
+        <div class="faq-a">Deutsch oder Englisch – ganz wie du möchtest.</div>
+    </div>
+
+    <div class="footer">
+        <p><a href="index.html">← Zurück zur Startseite</a> · <a href="https://github.com/RobiWahn86">GitHub</a></p>
+    </div>
+</div>
+</body>
+</html>
