@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<style>
+@page { size: A4; margin: 2.5cm 2cm; }
+body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #1a1a2e; font-size: 11pt; line-height: 1.6; }
+
+/* Cover */
+.cover { page-break-after: always; text-align: center; padding-top: 120px; }
+.cover h1 { font-size: 28pt; color: #00f5ff; margin-bottom: 8px; }
+.cover .subtitle { font-size: 14pt; color: #666; margin-bottom: 40px; }
+.cover .price { font-size: 22pt; color: #39ff14; font-weight: bold; }
+.cover .meta { color: #999; font-size: 10pt; margin-top: 60px; }
+
+/* Chapters */
+h2 { font-size: 18pt; color: #00f5ff; margin-top: 30px; padding-bottom: 6px; border-bottom: 2px solid #00f5ff33; }
+h3 { font-size: 13pt; color: #39ff14; margin-top: 20px; }
+p { margin: 8px 0; color: #333; }
+ul { margin: 8px 0; padding-left: 20px; }
+li { margin: 4px 0; color: #444; }
+
+/* Code */
+.code-block { background: #f5f5f8; border-left: 3px solid #00f5ff; padding: 12px 16px; font-family: 'Courier New', monospace; font-size: 9pt; margin: 12px 0; border-radius: 0 4px 4px 0; color: #333; overflow-x: auto; }
+
+/* Boxes */
+.tip { background: #f0f9ff; border-left: 3px solid #00f5ff; padding: 12px 16px; margin: 12px 0; border-radius: 0 4px 4px 0; }
+.warning { background: #fff8f0; border-left: 3px solid #ff8800; padding: 12px 16px; margin: 12px 0; }
+.keyword { display: inline-block; background: #00f5ff; color: #050505; padding: 2px 8px; border-radius: 3px; font-size: 9pt; font-weight: bold; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 10pt; }
+th { background: #00f5ff; color: #050505; padding: 8px 12px; text-align: left; }
+td { padding: 6px 12px; border-bottom: 1px solid #eee; }
+
+/* Page break */
+.page-break { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+    <h1>Trading Bot Starter</h1>
+    <div class="subtitle">Von der Idee zum ersten automatisierten Trade –<br>in 5 Schritten mit Python</div>
+    <div class="price">Inklusive Bot-Code + Dashboard</div>
+    <div class="meta">
+        Argo.cashflow<br>
+        Edition 2026
+    </div>
+</div>
+
+<!-- CHAPTER 1 -->
+<h2>1. Was ist ein Trading Bot?</h2>
+<p>Ein Trading Bot ist ein Computerprogramm, das automatisch Trades auf Finanzmärkten ausführt – ohne dass du da sein musst. Der Bot analysiert Marktdaten, erkennt Chancen und handelt in Millisekunden.</p>
+
+<div class="tip">
+<strong>💡 Die Idee:</strong> Wenn du eine Chance erkennst, dauert es Sekunden bis du klickst. Ein Bot reagiert in <strong>Millisekunden</strong>. Das ist der Unterschied zwischen Gewinn und "zu spät".
+</div>
+
+<h3>Was kann ein Bot?</h3>
+<ul>
+    <li>24/7 Märkte beobachten – auch wenn du schläfst</li>
+    <li>Hunderte Events gleichzeitig scannen</li>
+    <li>Mathematisch optimierte Entscheidungen treffen</li>
+    <li>Diszipliniert nach Regeln handeln (keine Emotionen)</li>
+</ul>
+
+<h3>Was brauchst du?</h3>
+<table>
+    <tr><th>Voraussetzung</th><th>Details</th></tr>
+    <tr><td>Python-Grundlagen</td><td>Variablen, Funktionen, if/else – mehr nicht</td></tr>
+    <tr><td>API-Verständnis</td><td>Was ist ein API-Key? Wie funktioniert eine HTTP-Request?</td></tr>
+    <tr><td>Ein Konto bei einem Markt</td><td>Polymarket, Binance, Bybit, Kalshi, etc.</td></tr>
+    <tr><td>Ein kleiner VPS (optional)</td><td>Dauertbetrieb 24/7 – ab 5€/Monat bei Hetzner</td></tr>
+</table>
+
+<!-- CHAPTER 2 -->
+<h2 class="page-break">2. Die Mathematik hinter Arbitrage</h2>
+<p>Die einfachste und sicherste Bot-Strategie heißt <strong>Arbitrage</strong>: Kaufe den gleichen Gegenstand gleichzeitig günstiger und teurer – der Preisunterschied ist dein Gewinn. Kein Risiko.</p>
+
+<h3>Prediction Market Arbitrage</h3>
+<p>Auf Plattformen wie Polymarket gibt es Vorhersagemärkte. Beispiel "Wer wird US-Präsident?":</p>
+
+<table>
+    <tr><th>Kandidat</th><th>YES-Preis</th><th>NO-Preis</th></tr>
+    <tr><td>Kandidat A</td><td>0.60$</td><td>0.40$</td></tr>
+    <tr><td>Kandidat B</td><td>0.55$</td><td>0.45$</td></tr>
+</table>
+
+<p>Wenn du NO auf A (0.40$) und NO auf B (0.45$) kaufst, zahlst du insgesamt <strong>0.85$</strong>.</p>
+
+<p>Egal wer gewinnt: Der NO des Verlierers zahlt 1$. Deine Auszahlung = 1$.</p>
+
+<p><strong>Gewinn = 1.00$ − 0.85$ = 0.15$ (17.6% ROI) – völlig risikofrei.</strong></p>
+
+<div class="tip">
+<strong>📐 Die Formel:</strong> Arbitrage existiert wenn Σ(NO-Preise) &lt; 1.00. Je niedriger die Summe, desto höher der Gewinn.
+</div>
+
+<h3>Warum gibt es das?</h3>
+<ul>
+    <li><strong>Liquiditätslücken:</strong> Nicht genug Händler die beide Seiten bepreisen</li>
+    <li><strong>Zeitverzögerung:</strong> Preise passen sich nicht sofort an</li>
+    <li><strong>Komplexität:</strong> Die meisten Händler rechnen nicht nach</li>
+</ul>
+
+<!-- CHAPTER 3 -->
+<h2 class="page-break">3. Bot-Architektur</h2>
+<p>Ein guter Bot besteht aus 5 Komponenten:</p>
+
+<table>
+    <tr><th>Komponente</th><th>Aufgabe</th></tr>
+    <tr><td>📡 Datenquelle</td><td>API-Verbindung zum Markt (z.B. Polymarket CLOB API)</td></tr>
+    <tr><td>🧠 Analyzer</td><td>Berechnet Arbitrage-Chancen mathematisch</td></tr>
+    <tr><td>📊 Orderbuch-Scanner</td><td>Prüft Live-Preise und Liquidität</td></tr>
+    <tr><td>🤖 Executor</td><td>Platziert Orders mit Slippage-Schutz</td></tr>
+    <tr><td>📝 Logger</td><td>Schreibt jeden Trade in eine CSV-Datei</td></tr>
+</table>
+
+<h3>Minimaler Bot-Code</h3>
+<div class="code-block">
+import requests<br><br>
+API = "https://gamma-api.polymarket.com"<br>
+events = requests.get(f"{API}/events?active=true").json()<br><br>
+for event in events:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;markets = event.get("markets", [])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for m in markets:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;price = float(m["outcomePrices"][1])  # NO-Preis<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if price &lt; 0.45:  # Arbitrage-Kandidat<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(f"Chance: {m['question']} bei {price}")
+</div>
+
+<div class="warning">
+<strong>⚠️ Wichtig:</strong> Das ist ein Proof-of-Concept! Ein produktiver Bot braucht zusätzlich: Fehlerbehandlung, Retry-Logik, Slippage-Schutz, Logging und ein Dashboard.
+</div>
+
+<!-- CHAPTER 4 -->
+<h2 class="page-break">4. Slippage-Schutz & Order-Ausführung</h2>
+<p>Der häufigste Fehler: Der Bot findet eine Chance, aber der Live-Preis weicht ab.</p>
+
+<h3>Multi-Level Orderbuch</h3>
+<p>Statt nur den besten Preis zu nehmen, scannt der Bot die Top-10 Ask-Levels:</p>
+
+<div class="code-block">
+asks = orderbook["asks"]<br>
+sorted_asks = sorted(asks, key=lambda x: float(x["price"]))<br><br>
+for level, ask in enumerate(sorted_asks[:10]):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;price = float(ask["price"])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;size = float(ask["size"])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if price > max_price: break<br>
+&nbsp;&nbsp;&nbsp;&nbsp;filled += min(size, remaining)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;weighted_price += price * filled<br><br>
+avg_price = weighted_price / filled
+</div>
+
+<h3>Retry-Logik</h3>
+<p>Wenn eine Order fehlschlägt, wiederholt der Bot mit -2% Preis-Anpassung (max. 3 Versuche):</p>
+
+<ul>
+    <li><strong>Versuch 1:</strong> Marktpreis</li>
+    <li><strong>Versuch 2:</strong> −2% vom Marktpreis</li>
+    <li><strong>Versuch 3:</strong> −4% vom Marktpreis</li>
+    <li><strong>Danach:</strong> Abbruch + Log-Eintrag</li>
+</ul>
+
+<!-- CHAPTER 5 -->
+<h2 class="page-break">5. Live-Dashboard & Performance</h2>
+<p>Ohne Dashboard weißt du nicht ob dein Bot funktioniert. Deshalb gehört zu jedem guten Bot ein Live-Monitoring:</p>
+
+<h3>Was dein Dashboard zeigen sollte:</h3>
+<table>
+    <tr><th>KPI</th><th>Warum wichtig?</th></tr>
+    <tr><td>Gesamtzahl Trades</td><td>Wie aktiv ist der Bot?</td></tr>
+    <tr><td>Erfolgsrate (%)</td><td>Wie viele Trades waren profitabel?</td></tr>
+    <tr><td>Kumulierter P&amp;L</td><td>Gesamtgewinn über Zeit</td></tr>
+    <tr><td>Top-Events</td><td>Welche Events bringen die meisten Gewinne?</td></tr>
+    <tr><td>Slippage pro Trade</td><td>Wie weit weicht der Ausführungspreis ab?</td></tr>
+</table>
+
+<h3>Wochenbericht</h3>
+<p>Einmal pro Woche sollte der Bot eine Zusammenfassung erstellen:</p>
+<ul>
+    <li>Trades dieser Woche</li>
+    <li>Gewinn/Verlust</li>
+    <li>Bester/schlechtester Trade</li>
+    <li>Empfehlungen zur Optimierung</li>
+</ul>
+
+<div class="tip">
+<strong>📊 Pro-Tipp:</strong> Tracke nicht nur den Gewinn, sondern auch <strong>verpasste Chancen</strong> (Trades die knapp nicht geklappt haben). Das zeigt dir wo du optimieren kannst.
+</div>
+
+<!-- OUTRO -->
+<h2 class="page-break">Fazit & Nächste Schritte</h2>
+
+<p>Du hast jetzt die Grundlagen um deinen eigenen Trading Bot zu bauen. Der Weg ist klar:</p>
+
+<ol>
+    <li><strong>Lerne die Mathematik</strong> – Arbitrage-Formel verstehen</li>
+    <li><strong>API erkunden</strong> – Teste die Endpunkte mit curl</li>
+    <li><strong>Bot in Simulation testen</strong> – DRY_RUN=True</li>
+    <li><strong>Dashboard aufsetzen</strong> – Tracke jede Bewegung</li>
+    <li><strong>Mit kleinen Beträgen live gehen</strong> – 10-20$ zum Testen</li>
+</ol>
+
+<div class="warning">
+<strong>⚠️ Rechtlicher Hinweis:</strong> Polymarket ist eine US-Plattform. Informiere dich vor der Nutzung über die rechtliche Lage in deinem Land. Dieser Guide dient zu Bildungszwecken.
+</div>
+
+<p style="text-align:center;margin-top:60px;color:#999;font-size:10pt;">
+— Ende des Guides —<br><br>
+Mehr Tutorials auf <strong>youtube.com/@argo.cashflow</strong><br>
+Bot-Code: <strong>github.com/RobiWahn86/polymarket-arb-bot</strong>
+</p>
+
+</body>
+</html>
